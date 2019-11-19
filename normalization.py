@@ -1,3 +1,5 @@
+#Made by Daniel Glass
+
 import pandas as pd
 import MySQLdb
 import mysql.connector
@@ -56,9 +58,12 @@ TABLES['BOOK']=(
     CREATE TABLE BOOK(
         Isbn VARCHAR({}) NOT NULL UNIQUE,
         Title VARCHAR({}),
+        Cover VARCHAR({}),
+        Publisher VARCHAR({}),
+        Pages INT NOT NULL,
         PRIMARY KEY (Isbn)
     );
-    """.format(isbn_length,title_length)
+    """.format(isbn_length,title_length,cover_length,publisher_length)
 )
 TABLES['AUTHOR']=(
     """
@@ -118,7 +123,7 @@ TABLES['FINES']=(
     );
     """
 )
-#get password
+
 host_in = input("Enter your MySQL Workbench Host address (press enter if it's the default) ")
 usr_in = input('Enter your MySQL Workbench Username (probably root) ')
 pwd_in = input('Enter your MySQL Workbench Password ')
@@ -164,10 +169,15 @@ for index, row in df.iterrows():
     
     title = row['Title']
     title = str(title).replace(r"'",r"''")
+    cover = row['Cover']
+    cover = str(cover).replace(r"'",r"''")
+    publisher = row['Publisher']
+    publisher = str(publisher).replace(r"'",r"''")
+    pages = row['Pages']
     
     cur.execute("""
-                INSERT IGNORE INTO BOOK VALUES ('{}','{}');
-                """.format(isbn10, title))
+                INSERT IGNORE INTO BOOK VALUES ('{}','{}','{}','{}','{}');
+                """.format(isbn10, title, cover, publisher, pages))
     #Adding each other to the book and author list
     for author in author_list:
         cur.execute("""
