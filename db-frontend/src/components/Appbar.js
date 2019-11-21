@@ -24,11 +24,16 @@ export default function Appbar() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Link to="/books" style={{ textDecoration: "none", color: "white" }}>
+          <Link to="/books" style={{ textDecoration: "none", color: "white", marginRight: 20 }}>
             <Typography variant="h6" className={classes.title}>
               Library
             </Typography>
           </Link>
+          {/* <Link to="/checked-out" style={{ textDecoration: "none", color: "white" }}>
+            <Typography variant="h6" className={classes.title}>
+              Checked-Out
+            </Typography>
+          </Link> */}
         </Toolbar>
       </AppBar>
     </div>

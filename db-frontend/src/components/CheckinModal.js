@@ -26,7 +26,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function CheckinModal({ open, onClose, book }) {
+export default function CheckinModal({
+  open,
+  onClose,
+  book,
+  onCheckin,
+  onChangeCardNo
+}) {
   const classes = useStyles();
 
   return (
@@ -41,9 +47,9 @@ export default function CheckinModal({ open, onClose, book }) {
       >
         <Card className={classes.paper}>
           <CardContent>
-            <h2>Check In</h2>
+            <h2>Return</h2>
             <p>
-              You are attempting to check in <b>{book.Title}</b>.
+              You are attempting to return <b>{book.Title}</b>.
             </p>
             <p>
               Please provide us with your <b>library card number</b> to proceed.
@@ -54,6 +60,7 @@ export default function CheckinModal({ open, onClose, book }) {
               label="Library Card Number"
               margin="normal"
               style={{ width: "100%" }}
+              onChange={e => onChangeCardNo(e.target.value)}
             />
 
             <Box
@@ -66,8 +73,8 @@ export default function CheckinModal({ open, onClose, book }) {
               <Button variant="contained" color="secondary" onClick={onClose}>
                 Cancel
               </Button>
-              <Button variant="contained" color="primary">
-                Check-In
+              <Button onClick={onCheckin} variant="contained" color="primary">
+                Return
               </Button>
             </Box>
           </CardContent>

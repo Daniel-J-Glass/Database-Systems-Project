@@ -27,7 +27,7 @@ app.listen(port, () => {
 
 app.get("/book/all", (req, res) => {
   connection.query(
-    "SELECT BOOK.Isbn, BOOK.Title, BOOK.Cover, BOOK.Publisher, BOOK.Pages, GROUP_CONCAT(AUTHOR.Name) Name, GROUP_CONCAT(AUTHOR.Author_id) Author_id FROM BOOK NATURAL JOIN BOOK_AUTHOR NATURAL JOIN AUTHOR GROUP BY BOOK.Isbn ORDER BY Isbn LIMIT 100",
+    "SELECT BOOK.Isbn, BOOK.Title, BOOK.Cover, BOOK.Publisher, BOOK.Pages, GROUP_CONCAT(AUTHOR.Name) Name, GROUP_CONCAT(AUTHOR.Author_id) Author_id FROM BOOK NATURAL JOIN BOOK_AUTHOR NATURAL JOIN AUTHOR GROUP BY BOOK.Isbn ORDER BY RAND() LIMIT 100",
     function(error, results, fields) {
       if (error) {
         res.json({ error: error });
@@ -38,6 +38,23 @@ app.get("/book/all", (req, res) => {
       }
     }
   );
+});
+
+app.get("/book/search/:searchTerm", (req, res) => {
+  const searchTerm = req.params.searchTerm;
+  const query = `(SELECT BOOK.Isbn, BOOK.Title, BOOK.Cover, BOOK.Publisher, BOOK.Pages, GROUP_CONCAT(AUTHOR.Name) Name, GROUP_CONCAT(AUTHOR.Author_id) Author_id FROM BOOK NATURAL JOIN BOOK_AUTHOR NATURAL JOIN AUTHOR WHERE((BOOK.Isbn LIKE '%${searchTerm}%') OR (BOOK.Title LIKE '%${searchTerm}%') or (AUTHOR.Name LIKE '%${searchTerm}%')) GROUP BY BOOK.Isbn ORDER BY Isbn);`;
+  console.log(searchTerm);
+  console.log(query);
+
+  connection.query(query, function(error, results, fields) {
+    if (error) {
+      res.json({ error: error });
+      console.log(error);
+      throw error;
+    } else {
+      res.json({ results: results });
+    }
+  });
 });
 
 app.post("/book/checkout", (req, res) => {
@@ -95,4 +112,49 @@ app.post("/book/checkout", (req, res) => {
   });
 });
 
-app.post("/book/checkin", (req, res) => {});
+app.post("/book/checkin", (req, res) => {
+  const dateIn = moment().toISOString();
+
+  const query = `SELECT *  FROM book_loan WHERE Isbn = ${req.body.Isbn} AND Date_in = ''`;
+  const updateQuery = `UPDATE book_loan SET Date_in = '${dateIn}' WHERE Isbn = ${req.body.Isbn};`;
+
+  connection.query(query, function(error, results, fields) {
+    if (error) {
+      res.json({ message: error });
+      console.log(error);
+      throw error;
+    } else {
+      console.log(JSON.stringify(results));
+      console.log(req.body)
+      if (results.length !== 1)
+        res.json({
+          message:
+            "You do not have this book checked out. You therefore cannot return it."
+        });
+
+      if (results.length === 1 && results[0].Card_id != req.body.Card_no)
+        res.json({
+          message:
+            "Someone else has this book checked out, not you. You are therefore unable to return it."
+        });
+
+      if (results.length === 1 && results[0].Card_id == req.body.Card_no) {
+        if (error) {
+          res.json({ message: error });
+          console.log(error);
+          throw error;
+        } else {
+          connection.query(updateQuery, function(error, results, fields) {
+            if (error) {
+              res.json({ message: error });
+              console.log(error);
+              throw error;
+            } else {
+              res.json({ message: "Successfully checked in book!" });
+            }
+          });
+        }
+      }
+    }
+  });
+});

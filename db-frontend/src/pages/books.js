@@ -27,23 +27,38 @@ export default function Books() {
   const books = useStoreState(state => state.book.books);
   const addBooks = useStoreActions(state => state.book.addBooks);
   const [search, setSearch] = useState("");
+  const searchAllBooks = () => {
+    if (search) {
+      fetch("http://localhost:3000/book/search/" + search)
+        .then(response => response.json())
+        .then(json => {
+          console.log(json);
+          addBooks(json.results);
+        })
+        .catch(error => {
+          console.log(error);
+          toast.error(error.error);
+        });
+    } else {
+      fetch("http://localhost:3000/book/all")
+        .then(response => response.json())
+        .then(json => {
+          console.log(json);
+          addBooks(json.results);
+        })
+        .catch(error => {
+          console.log(error);
+          toast.error(error.error);
+        });
+    }
+  };
   const [debouncedCallback] = useDebouncedCallback(value => {
-    console.log("Searching for " + value + "...");
+    searchAllBooks();
   }, 1000);
 
   const getBooks = async () => {
     toast.info("Getting books...");
-
-    fetch("http://localhost:3000/book/all")
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        addBooks(json.results);
-      })
-      .catch(error => {
-        console.log(error);
-        toast.error(error.error);
-      });
+    searchAllBooks();
   };
 
   useEffect(() => {

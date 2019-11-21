@@ -19,12 +19,13 @@ const useStyles = makeStyles(theme => ({
     marginLeft: -44
   },
   paper: {
-    height: 450,
-    width: 300
+    width: 300,
+    paddingBottom: 24
   },
   media: {
-    height: 0,
-    paddingTop: "56.25%"
+    width: "100%",
+    height: 500,
+    align: "top"
   }
 }));
 
@@ -52,7 +53,7 @@ export default function BookGrid({ books }) {
                 />
                 <CardMedia
                   className={classes.media}
-                  image={value.Image}
+                  image={`http://covers.openlibrary.org/b/isbn/${value.Isbn}.jpg`}
                   title="Paella dish"
                 />
                 <CardContent>

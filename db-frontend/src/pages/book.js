@@ -23,12 +23,13 @@ const useStyles = makeStyles(theme => ({
     marginLeft: -44
   },
   paper: {
-    height: 650,
-    width: 450
+    width: 450,
+    paddingBottom: 24
   },
   media: {
-    height: 0,
-    paddingTop: "56.25%"
+    width: "100%",
+    height: 450,
+    align: "top"
   }
 }));
 
@@ -68,6 +69,20 @@ export default function Book(props) {
       .catch(error => toast.info(error.message));
   };
 
+  const checkinBook = () => {
+    fetch("http://localhost:3000/book/checkin", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ Isbn: value.Isbn, Card_no: cardNo })
+    })
+      .then(response => response.json())
+      .then(json => toast.info(json.message))
+      .catch(error => toast.info(error.message));
+  };
+
   return (
     <Grid
       container
@@ -86,7 +101,7 @@ export default function Book(props) {
         />
         <CardMedia
           className={classes.media}
-          image={value.Image}
+          image={`http://covers.openlibrary.org/b/isbn/${value.Isbn}.jpg`}
           title="Paella dish"
         />
         <CardContent>
@@ -100,7 +115,6 @@ export default function Book(props) {
         </CardContent>
 
         <Box
-          mt={17}
           width="100%"
           display="flex"
           justifyContent="space-around"
@@ -114,7 +128,7 @@ export default function Book(props) {
             variant="contained"
             color="primary"
           >
-            Check-In
+            Return
           </Button>
           <Button
             onClick={() => setCheckoutModalOpen(true)}
@@ -137,6 +151,8 @@ export default function Book(props) {
         book={value}
         open={checkinModalOpen}
         onClose={onCloseCheckinModal}
+        onCheckin={checkinBook}
+        onChangeCardNo={setCardNo}
       />
     </Grid>
   );
