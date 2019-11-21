@@ -41,8 +41,8 @@ app.get("/book/all", (req, res) => {
 });
 
 app.get("/book/search/:searchTerm", (req, res) => {
-  const searchTerm = req.params.searchTerm;
-  const query = `(SELECT BOOK.Isbn, BOOK.Title, BOOK.Cover, BOOK.Publisher, BOOK.Pages, GROUP_CONCAT(AUTHOR.Name) Name, GROUP_CONCAT(AUTHOR.Author_id) Author_id FROM BOOK NATURAL JOIN BOOK_AUTHOR NATURAL JOIN AUTHOR WHERE((BOOK.Isbn LIKE '%${searchTerm}%') OR (BOOK.Title LIKE '%${searchTerm}%') or (AUTHOR.Name LIKE '%${searchTerm}%')) GROUP BY BOOK.Isbn ORDER BY Isbn);`;
+  const searchTerm = req.params.searchTerm.replace(" ", "|");
+  const query = `(SELECT BOOK.Isbn, BOOK.Title, BOOK.Cover, BOOK.Publisher, BOOK.Pages, GROUP_CONCAT(AUTHOR.Name) Name, GROUP_CONCAT(AUTHOR.Author_id) Author_id FROM BOOK NATURAL JOIN BOOK_AUTHOR NATURAL JOIN AUTHOR WHERE((BOOK.Isbn REGEXP '.*${searchTerm}.*') OR (BOOK.Title REGEXP '.*${searchTerm}.*') or (AUTHOR.Name REGEXP '.*${searchTerm}.*')) GROUP BY BOOK.Isbn ORDER BY Isbn);`;
   console.log(searchTerm);
   console.log(query);
 
@@ -125,7 +125,7 @@ app.post("/book/checkin", (req, res) => {
       throw error;
     } else {
       console.log(JSON.stringify(results));
-      console.log(req.body)
+      console.log(req.body);
       if (results.length !== 1)
         res.json({
           message:
