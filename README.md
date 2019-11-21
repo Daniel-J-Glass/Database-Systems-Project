@@ -34,7 +34,7 @@ Conversion notes:
 
 <ol>
 
-<li>Setup MySQL server
+<li>Setup MySQL server on localhost, user: 'root', password: 'password'
 
 <li>Setup MySQL Workbench (<a href="https://dev.mysql.com/downloads/workbench/">https://dev.mysql.com/downloads/workbench/</a>)
 
