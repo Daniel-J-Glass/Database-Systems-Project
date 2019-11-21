@@ -1,14 +1,17 @@
 import React from "react";
 import Router from "./Router";
 import "./App.css";
-import books from "./testData/books";
-import { BookProvider } from "./context/bookContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import store from "./store/store";
+import { StoreProvider } from "easy-peasy";
 
 function App() {
   return (
-    <BookProvider value={books}>
+    <StoreProvider store={store}>
       <Router />
-    </BookProvider>
+      <ToastContainer />
+    </StoreProvider>
   );
 }
 

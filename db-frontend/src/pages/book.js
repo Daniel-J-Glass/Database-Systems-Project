@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { BookConsumer } from "../context/bookContext";
 import {
   Card,
   CardContent,
@@ -14,6 +13,8 @@ import { makeStyles } from "@material-ui/styles";
 import { Link } from "react-router-dom";
 import CheckoutModal from "../components/CheckoutModal";
 import CheckinModal from "../components/CheckinModal";
+import { useStoreState } from "easy-peasy";
+import { toast } from "react-toastify";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,92 +37,107 @@ export default function Book(props) {
     match: { params }
   } = props;
   const classes = useStyles();
+
+  const [cardNo, setCardNo] = useState("");
+
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
   const onCloseCheckoutModal = () => {
     setCheckoutModalOpen(false);
   };
+
   const [checkinModalOpen, setCheckinModalOpen] = useState(false);
   const onCloseCheckinModal = () => {
     setCheckinModalOpen(false);
   };
 
+  const value = useStoreState(state =>
+    state.book.books.find(book => book.Isbn === params.id)
+  );
+
+  const checkoutBook = () => {
+    fetch("http://localhost:3000/book/checkout", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ Isbn: value.Isbn, Card_no: cardNo })
+    })
+      .then(response => response.json())
+      .then(json => toast.info(json.message))
+      .catch(error => toast.info(error.message));
+  };
+
   return (
-    <BookConsumer>
-      {books => {
-        const value = books.find(localBook => localBook.Isbn === params.id);
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justify="center"
+      style={{ minHeight: "100vh", marginTop: -32 }}
+    >
+      <Card className={classes.paper}>
+        <CardHeader
+          title={value.Title}
+          subheader={
+            value.Pages !== "0" ? value.Pages + " pages" : "No Page Data Found"
+          }
+        />
+        <CardMedia
+          className={classes.media}
+          image={value.Image}
+          title="Paella dish"
+        />
+        <CardContent>
+          <Typography variant="body2" color="textSecondary" component="p">
+            <b>Written by:</b> {value.Name}
+            <br />
+            <b>Isbn:</b> {value.Isbn}
+            <br />
+            <b>Publisher:</b> {value.Publisher}
+          </Typography>
+        </CardContent>
 
-        return (
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: "100vh", marginTop: -32 }}
+        <Box
+          mt={17}
+          width="100%"
+          display="flex"
+          justifyContent="space-around"
+          alignItems="flex-end"
+        >
+          <Link to="/books" style={{ textDecoration: "none" }}>
+            <Button variant="contained">Go Back</Button>
+          </Link>
+          <Button
+            onClick={() => setCheckinModalOpen(true)}
+            variant="contained"
+            color="primary"
           >
-            <Card className={classes.paper}>
-              <CardHeader
-                title={value.Title}
-                subheader={
-                  value.Pages !== "0"
-                    ? value.Pages + " pages"
-                    : "No Page Data Found"
-                }
-              />
-              <CardMedia
-                className={classes.media}
-                image={value.Image}
-                title="Paella dish"
-              />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Mort is a fantasy novel by British writer Terry Pratchett.
-                  Published in 1987, it is the fourth Discworld novel and the
-                  first to focus on the character Death, who only appeared as a
-                  side character in the previous novels.
-                </Typography>
-              </CardContent>
+            Check-In
+          </Button>
+          <Button
+            onClick={() => setCheckoutModalOpen(true)}
+            variant="contained"
+            color="primary"
+          >
+            Checkout
+          </Button>
+        </Box>
+      </Card>
 
-              <Box
-                mt={17}
-                width="100%"
-                display="flex"
-                justifyContent="space-around"
-                alignItems="flex-end"
-              >
-                <Link to="/books" style={{ textDecoration: "none" }}>
-                  <Button variant="contained">Go Back</Button>
-                </Link>
-                <Button
-                  onClick={() => setCheckinModalOpen(true)}
-                  variant="contained"
-                  color="primary"
-                >
-                  Check-In
-                </Button>
-                <Button
-                  onClick={() => setCheckoutModalOpen(true)}
-                  variant="contained"
-                  color="primary"
-                >
-                  Checkout
-                </Button>
-              </Box>
-            </Card>
-
-            <CheckoutModal
-              book={value}
-              open={checkoutModalOpen}
-              onClose={onCloseCheckoutModal}
-            />
-            <CheckinModal
-              book={value}
-              open={checkinModalOpen}
-              onClose={onCloseCheckinModal}
-            />
-          </Grid>
-        );
-      }}
-    </BookConsumer>
+      <CheckoutModal
+        book={value}
+        open={checkoutModalOpen}
+        onClose={onCloseCheckoutModal}
+        onChangeCardNo={setCardNo}
+        onCheckout={checkoutBook}
+      />
+      <CheckinModal
+        book={value}
+        open={checkinModalOpen}
+        onClose={onCloseCheckinModal}
+      />
+    </Grid>
   );
 }

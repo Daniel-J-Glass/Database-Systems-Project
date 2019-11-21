@@ -17,7 +17,6 @@ const useStyles = makeStyles(theme => ({
     marginLeft: -44
   },
   paper: {
-    height: 300,
     width: 500
   },
   media: {
@@ -26,7 +25,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function CheckoutModal({ open, onClose, book }) {
+export default function CheckoutModal({
+  open,
+  onClose,
+  book,
+  onCheckout,
+  onChangeCardNo
+}) {
   const classes = useStyles();
 
   return (
@@ -54,6 +59,7 @@ export default function CheckoutModal({ open, onClose, book }) {
               label="Library Card Number"
               margin="normal"
               style={{ width: "100%" }}
+              onChange={e => onChangeCardNo(e.target.value)}
             />
 
             <Box
@@ -66,7 +72,7 @@ export default function CheckoutModal({ open, onClose, book }) {
               <Button variant="contained" color="secondary" onClick={onClose}>
                 Cancel
               </Button>
-              <Button variant="contained" color="primary">
+              <Button onClick={onCheckout} variant="contained" color="primary">
                 Checkout
               </Button>
             </Box>
