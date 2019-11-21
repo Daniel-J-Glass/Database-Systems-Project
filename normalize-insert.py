@@ -42,7 +42,7 @@ print('Max publisher length:', publisher_length)
 
 #Guesstimating max data requirements
 ssn_length = 9
-date_length = 16 #for ISO 8601
+date_length = 24 #for ISO 8601
 borrower_length = 64
 address_length = 128
 phone_length = 8
@@ -97,6 +97,22 @@ TABLES['BORROWER']=(
     );
     """.format(ssn_length,borrower_length,address_length,phone_length)
 )
+# TABLES['BOOK_LOAN']=(
+#     """
+#     CREATE TABLE BOOK_LOAN(
+#         Loan_id INT NOT NULL AUTO_INCREMENT,
+#         Isbn VARCHAR({}) NOT NULL,
+#         Card_id INT NOT NULL,
+#         Date_out VARCHAR({}),
+#         Due_date VARCHAR({}),
+#         Date_in VARCHAR({}),
+#         FOREIGN KEY (Isbn) REFERENCES BOOK(Isbn) ON DELETE CASCADE ON UPDATE CASCADE,
+#         FOREIGN KEY (Card_id) REFERENCES BORROWER(Card_id) ON DELETE CASCADE ON UPDATE CASCADE,
+#         PRIMARY KEY (Loan_id)
+#     );
+#     """.format(isbn_length,date_length,date_length,date_length)
+# )
+
 TABLES['BOOK_LOAN']=(
     """
     CREATE TABLE BOOK_LOAN(
@@ -107,7 +123,6 @@ TABLES['BOOK_LOAN']=(
         Due_date VARCHAR({}),
         Date_in VARCHAR({}),
         FOREIGN KEY (Isbn) REFERENCES BOOK(Isbn) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (Card_id) REFERENCES BORROWER(Card_id) ON DELETE CASCADE ON UPDATE CASCADE,
         PRIMARY KEY (Loan_id)
     );
     """.format(isbn_length,date_length,date_length,date_length)

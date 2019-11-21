@@ -9,4 +9,4 @@ f.close()
 
 f = open('LibraryDump(Fixed1).sql', "w", encoding='UTF-8')
 f.write(output)
-f.close
+f.close()
