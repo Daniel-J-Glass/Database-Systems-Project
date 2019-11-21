@@ -123,11 +123,13 @@ CREATE TABLE `book_loan` (
 -- Dumping data for table `book_loan`
 --
 
-LOCK TABLES `book_loan` WRITE;
-/*!40000 ALTER TABLE `book_loan` DISABLE KEYS */;
-INSERT INTO `book_loan` VALUES (1,'0001047973',1,'2019-11-21T01:33:08.862Z','2019-11-21T01:33:08.862Z',''),(2,'0001047973',1,'2019-11-21T01:33:08.862Z','2019-11-21T01:33:08.862Z','');
-/*!40000 ALTER TABLE `book_loan` ENABLE KEYS */;
-UNLOCK TABLES;
+
+-- LOCK TABLES `book_loan` WRITE;
+-- /*!40000 ALTER TABLE `book_loan` DISABLE KEYS */;
+-- INSERT INTO `book_loan` VALUES (1,'0001047973',1,'2019-11-21T01:33:08.862Z','2019-11-21T01:33:08.862Z',''),(2,'0001047973',1,'2019-11-21T01:33:08.862Z','2019-11-21T01:33:08.862Z','');
+-- /*!40000 ALTER TABLE `book_loan` ENABLE KEYS */;
+-- UNLOCK TABLES;
+
 
 --
 -- Table structure for table `borrower`
