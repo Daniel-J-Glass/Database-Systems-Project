@@ -150,7 +150,7 @@ app.post("/book/checkin", (req, res) => {
               console.log(error);
               throw error;
             } else {
-              res.json({ message: "Successfully checked in book!" });
+              res.json({ message: "Successfully returned book!" });
             }
           });
         }
