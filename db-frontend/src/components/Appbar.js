@@ -24,16 +24,38 @@ export default function Appbar() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Link to="/books" style={{ textDecoration: "none", color: "white", marginRight: 20 }}>
+          <Link
+            to="/books"
+            style={{ textDecoration: "none", color: "white", marginRight: 20 }}
+          >
             <Typography variant="h6" className={classes.title}>
               Library
             </Typography>
           </Link>
-          {/* <Link to="/checked-out" style={{ textDecoration: "none", color: "white" }}>
+          <Link
+            to="/borrowers"
+            style={{ textDecoration: "none", color: "white", marginRight: 20 }}
+          >
             <Typography variant="h6" className={classes.title}>
-              Checked-Out
+              Borrowers
             </Typography>
-          </Link> */}
+          </Link>
+          <Link
+            to="/fines"
+            style={{ textDecoration: "none", color: "white", marginRight: 20 }}
+          >
+            <Typography variant="h6" className={classes.title}>
+              Fines
+            </Typography>
+          </Link>
+          <Link
+            to="/loans"
+            style={{ textDecoration: "none", color: "white" }}
+          >
+            <Typography variant="h6" className={classes.title}>
+              Loans
+            </Typography>
+          </Link>
         </Toolbar>
       </AppBar>
     </div>

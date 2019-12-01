@@ -168,7 +168,7 @@ DROP TABLE IF EXISTS `fines`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fines` (
   `Loan_id` int(11) NOT NULL,
-  `Fine_amt` int(11) NOT NULL,
+  `Fine_amt` FLOAT(2) NOT NULL,
   `Paid` int(11) NOT NULL,
   PRIMARY KEY (`Loan_id`),
   CONSTRAINT `fines_ibfk_1` FOREIGN KEY (`Loan_id`) REFERENCES `book_loan` (`Loan_id`) ON DELETE CASCADE ON UPDATE CASCADE

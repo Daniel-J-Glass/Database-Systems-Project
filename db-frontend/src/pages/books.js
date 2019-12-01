@@ -54,7 +54,7 @@ export default function Books() {
   };
   const [debouncedCallback] = useDebouncedCallback(value => {
     searchAllBooks();
-  }, 1000);
+  }, 200);
 
   const getBooks = async () => {
     toast.info("Getting books...");
