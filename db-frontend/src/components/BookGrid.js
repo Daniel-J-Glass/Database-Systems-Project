@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function BookGrid({ books }) {
+export default function BookGrid({ books, loans }) {
   const classes = useStyles();
   const titleLength = 20;
 
@@ -42,8 +42,9 @@ export default function BookGrid({ books }) {
               <Card className={classes.paper}>
                 <CardHeader
                   title={
+                    value.Title &&
                     value.Title.substring(0, titleLength) +
-                    (value.Title.length > titleLength ? "..." : "")
+                      (value.Title.length > titleLength ? "..." : "")
                   }
                   subheader={
                     value.Pages !== "0"
@@ -62,11 +63,21 @@ export default function BookGrid({ books }) {
                     color="textSecondary"
                     component="p"
                   >
-                    <b>Written by:</b> {value.Name}
-                    <br />
+                    {value.Name && (
+                      <div>
+                        <b>Written by:</b> {value.Name}
+                        <br />
+                      </div>
+                    )}
                     <b>Isbn:</b> {value.Isbn}
                     <br />
                     <b>Publisher:</b> {value.Publisher}
+                    <br />
+                    <b>Checked Out:</b>{" "}
+                    {loans &&
+                    loans.find(loan => loan.Isbn === value.Isbn) !== undefined
+                      ? "Checked Out"
+                      : "Not Checked Out"}
                   </Typography>
                 </CardContent>
 

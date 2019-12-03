@@ -26,31 +26,39 @@ export default function Books() {
   const classes = useStyles();
   const books = useStoreState(state => state.book.books);
   const addBooks = useStoreActions(state => state.book.addBooks);
+  const setLoans = useStoreActions(state => state.setLoans);
+  const loans = useStoreState(state => state.loans);
+  const getLoans = useStoreActions(actions => actions.getLoans);
+
+  console.log("Loans: ", loans);
+
   const [search, setSearch] = useState("");
   const searchAllBooks = () => {
-    if (search) {
-      fetch("http://localhost:3000/book/search/" + search)
-        .then(response => response.json())
-        .then(json => {
-          console.log(json);
-          addBooks(json.results);
-        })
-        .catch(error => {
-          console.log(error);
-          toast.error(error.error);
-        });
-    } else {
-      fetch("http://localhost:3000/book/all")
-        .then(response => response.json())
-        .then(json => {
-          console.log(json);
-          addBooks(json.results);
-        })
-        .catch(error => {
-          console.log(error);
-          toast.error(error.error);
-        });
-    }
+    getLoans().finally(() => {
+      if (search) {
+        fetch("http://localhost:3000/book/search/" + search)
+          .then(response => response.json())
+          .then(json => {
+            console.log(json);
+            addBooks(json.results);
+          })
+          .catch(error => {
+            console.log(error);
+            toast.error(error.error);
+          });
+      } else {
+        fetch("http://localhost:3000/book/all")
+          .then(response => response.json())
+          .then(json => {
+            console.log(json);
+            addBooks(json.results);
+          })
+          .catch(error => {
+            console.log(error);
+            toast.error(error.error);
+          });
+      }
+    });
   };
   const [debouncedCallback] = useDebouncedCallback(value => {
     searchAllBooks();
@@ -83,7 +91,7 @@ export default function Books() {
           }}
         />
 
-        <BookGrid books={books} />
+        <BookGrid books={books} loans={loans} />
       </Box>
     </div>
   );

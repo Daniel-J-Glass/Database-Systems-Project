@@ -13,6 +13,7 @@ export default function App() {
       <Appbar />
 
       <Switch>
+        <Route path="/" exact component={Books} />
         <Route path="/books" component={Books} />
         <Route path="/book/:id" component={Book} />
         <Route path="/borrowers" component={Borrowers} />

@@ -83,6 +83,15 @@ app.get("/book/search/:searchTerm", (req, res) => {
   });
 });
 
+app.get("/loan/search/:term", (req, res) => {
+  const searchTerm = req.params.term.replace(" ", "|");
+  const query = `SELECT * FROM BOOK_LOAN NATURAL JOIN BOOK NATURAL JOIN BORROWER WHERE((BOOK_LOAN.Card_id REGEXP '.*${searchTerm}.*') OR (BORROWER.Bname REGEXP '.*${searchTerm}.*') or (BOOK_LOAN.Isbn REGEXP '.*${searchTerm}.*'));`;
+
+  tryWithMessage(query, res).then(response => {
+    res.json({ results: response });
+  });
+});
+
 app.post("/book/checkout", (req, res) => {
   const dateOut = moment().toISOString();
   const dateDue = moment()
@@ -369,6 +378,14 @@ app.get("/loans/get/:card_id", (req, res) => {
           "."
       )
     );
+    res.json({ loans: response });
+  });
+});
+
+app.get("/loans/allLoans", (req, res) => {
+  const allBookLoansWithCardNumber = `SELECT * FROM book_loan WHERE Date_in = '';`;
+
+  tryWithMessage(allBookLoansWithCardNumber, res).then(response => {
     res.json({ loans: response });
   });
 });

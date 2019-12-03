@@ -132,7 +132,7 @@ export default function Fines() {
 
       <Grid container spacing={3}>
         {filteredFines.map(fine => (
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Paper className={classes.paper} position="relative">
               <LocalAtm style={{ marginBottom: 16 }} />
               <Box>

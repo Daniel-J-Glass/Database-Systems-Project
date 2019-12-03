@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Link } from "react-router-dom";
 import CheckoutModal from "../components/CheckoutModal";
 import CheckinModal from "../components/CheckinModal";
-import { useStoreState } from "easy-peasy";
+import { useStoreState, useStoreActions } from "easy-peasy";
 import { toast } from "react-toastify";
 
 const useStyles = makeStyles(theme => ({
@@ -55,6 +55,9 @@ export default function Book(props) {
     state.book.books.find(book => book.Isbn === params.id)
   );
 
+  const loans = useStoreState(state => state.loans);
+  const getLoans = useStoreActions(actions => actions.getLoans);
+
   const checkoutBook = () => {
     fetch("http://localhost:3000/book/checkout", {
       method: "POST",
@@ -66,7 +69,8 @@ export default function Book(props) {
     })
       .then(response => response.json())
       .then(json => toast.info(json.message))
-      .catch(error => toast.info(error.message));
+      .catch(error => toast.info(error.message))
+      .finally(getLoans);
   };
 
   const checkinBook = () => {
@@ -80,7 +84,8 @@ export default function Book(props) {
     })
       .then(response => response.json())
       .then(json => toast.info(json.message))
-      .catch(error => toast.info(error.message));
+      .catch(error => toast.info(error.message))
+      .finally(getLoans);
   };
 
   return (
@@ -106,11 +111,20 @@ export default function Book(props) {
         />
         <CardContent>
           <Typography variant="body2" color="textSecondary" component="p">
-            <b>Written by:</b> {value.Name}
-            <br />
+            {value.Name && (
+              <div>
+                <b>Written by:</b> {value.Name}
+                <br />
+              </div>
+            )}
             <b>Isbn:</b> {value.Isbn}
             <br />
             <b>Publisher:</b> {value.Publisher}
+            <br />
+            <b>Checked Out:</b>{" "}
+            {loans && loans.find(loan => loan.Isbn === value.Isbn) !== undefined
+              ? "Checked Out"
+              : "Not Checked Out"}
           </Typography>
         </CardContent>
 

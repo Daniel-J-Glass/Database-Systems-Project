@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 import { useDebouncedCallback } from "use-debounce/lib";
 import BookGrid from "../components/BookGrid";
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -31,25 +31,17 @@ const useStyles = makeStyles(theme => ({
 export default function Loans() {
   const [search, setSearch] = useState("");
   const classes = useStyles();
-  const [loans, setLoans] = useState([]);
-  const addBooks = useStoreActions(actions => actions.book.actuallyAddBooks);
+  const superLoans = useStoreState(state => state.searchLoans);
+  const loans = useStoreState(state => state.loans);
+  const getLoans = useStoreActions(actions => actions.getLoansSearch);
 
-  const getLoans = () => {
-    fetch("http://localhost:3000/loans/get/" + search)
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        setLoans(json.loans);
-        addBooks(json.loans);
-      })
-      .catch(error => {
-        console.log(error);
-        toast.error(error.error);
-      });
-  };
   const [debouncedCallback] = useDebouncedCallback(value => {
-    getLoans();
+    getLoans(search);
   }, 100);
+
+  useEffect(() => {
+    getLoans(search);
+  }, []);
 
   return (
     <div style={{ padding: 16, margin: 0 }}>
@@ -58,7 +50,7 @@ export default function Loans() {
       <TextField
         id="outlined-basic"
         className={classes.textField}
-        label="Search for your loans by card number..."
+        label="Search by card number, name, or isbn..."
         margin="normal"
         variant="outlined"
         value={search}
@@ -68,7 +60,12 @@ export default function Loans() {
         }}
       />
 
-      <BookGrid books={loans} />
+      <BookGrid
+        books={superLoans.filter(loan =>
+          loans.find(smallLoan => smallLoan.Isbn === loan.Isbn)
+        )}
+        loans={loans}
+      />
     </div>
   );
 }
