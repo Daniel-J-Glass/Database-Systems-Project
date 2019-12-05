@@ -1,0 +1,43 @@
+Liam McMains
+    Wrote the frontend application using React, Redux, and Material UI.
+    Helped out with some of the backend along with the SQL statements.
+    Designed the frontend architecture and pages.
+    Interfaced with the backend api endpoints to get the whole application running smoothly.
+    Co-authored general documentation and setup for the project.
+    Coordinated the api schema between the backend and frontend to ensure all the correct endpoints were created.
+    Used a custom UI library to create a modern, performant, minimalistic user interface.
+    Implemented live search so records update automatically as you search for books or loans.
+    Extras:
+        Made small edits to SQL schema in the case of any issues.
+        Helped facilitate good communcation and timelines between team members.
+
+
+Seth Rayley
+    Wrote SQL statements for web application operations.
+    Wrote user guide for practical web application use.
+    Wrote the majority of the backend code.
+    Planned the backend architecture and how the endpoints would be used by the frontend.
+    Helped debug any backend related issues and tested the frontend to backend integration.
+    Extras:
+        Was very active in planning and researching how this project was to be implemented.
+        Helped with testing and troubleshooting application deployments.
+        Helped facilitate good communcation and timelines between team members.
+
+
+Daniel Glass
+    Setup database to work with our dataset (setting character encoding).
+    Created all the tables necessary for storing the data.
+    Created Python script to analyze and normalize data in the provided CSV.
+    Created a Python script to insert all records in their respective tables.
+    Generated MySQL dumps from the filled database.
+    Wrote the design document.
+    Extra:
+        Set up cascades to manage database (partially disabled for simpler use)
+        Designed the database to the extent of variable types and sizes based on outlier field values.
+        Helped facilitate good communcation and timelines between team members.
+
+
+Umar Kazi
+    
+
+
