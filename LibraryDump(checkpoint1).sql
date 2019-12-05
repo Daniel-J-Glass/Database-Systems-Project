@@ -145,7 +145,7 @@ CREATE TABLE `borrower` (
   `Ssn` varchar(9) DEFAULT NULL,
   `Bname` varchar(64) DEFAULT NULL,
   `Address` varchar(128) DEFAULT NULL,
-  `Phone` varchar(8) DEFAULT NULL,
+  `Phone` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`Card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

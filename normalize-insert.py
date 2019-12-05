@@ -45,7 +45,7 @@ ssn_length = 9
 date_length = 24 #for ISO 8601
 borrower_length = 64
 address_length = 128
-phone_length = 8
+phone_length = 12
 
 print('Made up values')
 print('Max borrower name length:', borrower_length)
