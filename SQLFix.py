@@ -1,3 +1,4 @@
+#Daniel Glass
 import re
 
 f = open('LibraryDump (With Extra).sql', encoding='UTF-8')
