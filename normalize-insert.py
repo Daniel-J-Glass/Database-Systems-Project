@@ -131,7 +131,7 @@ TABLES['FINES']=(
     """
     CREATE TABLE FINES(
         Loan_id INT NOT NULL,
-        Fine_amt INT NOT NULL,
+        Fine_amt FLOAT NOT NULL,
         Paid INT NOT NULL,
         PRIMARY KEY (Loan_id),
         FOREIGN KEY (Loan_id) REFERENCES BOOK_LOAN(Loan_id) ON DELETE CASCADE ON UPDATE CASCADE
